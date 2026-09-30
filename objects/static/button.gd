@@ -1,7 +1,7 @@
 extends Area2D
 
-signal buttonPress()
-signal buttonDepress()
+signal buttonPress(tutorial: bool)
+signal buttonDepress(tutorial: bool)
 
 var objects = 0
 var depressimg = load("res://objects/static/buttonUp.png")
@@ -14,15 +14,17 @@ func _ready() -> void:
 
 func _button_down(_body) -> void:
 	objects += 1
+#	print(objects)
 	if objects == 1:
 		$Sprite2D.texture=pressimg
-		buttonPress.emit()
-		$ButtonPress.play()
-		
+		buttonPress.emit(self.get_meta("tutorial"))
+		$ButtonPress.play()	
 	
 func _button_up(_body) -> void:
 	objects -= 1
+#	print(objects)
 	if objects == 0:
 		$Sprite2D.texture=depressimg
-		buttonDepress.emit()
+		buttonDepress.emit(self.get_meta("tutorial"))
 		$ButtonDepress.play()
+		

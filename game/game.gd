@@ -8,6 +8,7 @@ var oldPos = Vector2(0,0)
 @onready var placables = [$Pickup, $Pickup2, $Collectable]
 @export var debug := false
 var end = false
+var inTutorial = true
 
 var batteryTextures = [
 	load("res://player/flashlight/batteryGauge/batterylvl-1.png.png"),
@@ -19,11 +20,15 @@ var batteryTextures = [
 
 func _ready() -> void:
 	$Player/Flashlight.batteryChange.connect(_on_battery_change)
-	$CanvasLayer/Centernotify/PopupText.text = "Hold space to pull boxes.\nPress F to toggle your flashlight.\nKeep your flashlight charged to withstand the cold.\nMake it to your shelter"
+	$CanvasLayer/Centernotify/PopupText.modulate.a = 0.0
+	$CanvasLayer/Centernotify/PopupText.text = "Press F to toggle your flashlight.\nThe dark is cold.\nMake it to shelter"
 	placeItem($Collectable)
 	placeItem($Pickup2)
 	if debug:
 		$Player/Flashlight/Camera2D/CanvasModulate.hide()
+	$CanvasLayer/VBoxContainer/FlashlightDisplay.hide()
+	$Player/Flashlight.hide()
+		
 
 func _on_battery_change(newBat):
 	if debug:
@@ -43,13 +48,12 @@ func _on_battery_change(newBat):
 
 func _process(delta: float) -> void:
 	timer += delta * 1
-	if timer >= 20:
-		$CanvasLayer/Centernotify/PopupText.text = ""
 	if $Player/Flashlight/Light.enabled:
 		if danger > 0:
 			danger -= 10 * delta
 	else:
-		danger += 80 * delta / dangerLossTime
+		if not(inTutorial):
+			danger += 80 * delta / dangerLossTime
 	$Player/Texture/PlayerAura.energy = 0.2+0.8-(danger/100)
 	$CanvasLayer/DangerEdgeEffect.modulate.a = (danger)/100
 	if danger >= 80:
@@ -64,8 +68,22 @@ func gameEnd():
 	await get_tree().create_timer(5.0).timeout
 	get_tree().reload_current_scene()
 	
+
+func _on_safe_zone_area_exited(body: Node2D) -> void:
+	if body is Player:
+		inTutorial=false
+		$CanvasLayer/VBoxContainer/FlashlightDisplay.show()
+		$Player/Flashlight.show()
+		$"Tilemap Ground/Tilemap Tiles".set_cell(Vector2i(3,0),1,Vector2i(1,7))
+		$"Tilemap Ground/Tilemap Tiles".set_cell(Vector2i(4,0),1,Vector2i(1,7))
+		print(str(body) + " ended tutorial")
+		fadeIn($CanvasLayer/Centernotify/PopupText)
+		await get_tree().create_timer(10.0).timeout
+		fadeOut($CanvasLayer/Blackscreen)
+		$CanvasLayer/Centernotify/PopupText.text = ""
+	
 func _on_exit(body: Node2D) -> void:
-	if body == $Player:
+	if body is Player:
 		$CanvasLayer/Blackscreen/EndText.text = "You made it to your shelter after " + str(int(timer)) + " seconds.
 		You brought " + str(score) + " shiny objects along the way."
 		fadeIn($CanvasLayer/Blackscreen)
@@ -117,6 +135,3 @@ func fadeOut(target,length: float = 1.0):
 	var tween = create_tween()
 	tween.tween_property(target, "modulate:a", 0.0, length)
 	await tween.finished
-
-func _on_button_depress() -> void:
-	pass # Replace with function body.
