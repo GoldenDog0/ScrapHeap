@@ -2,8 +2,10 @@ extends CharacterBody2D
 class_name Player
 
 @export_range(0, 1000) var speed := 120
-# Called when the node enters the scene tree for the first time.
 var inputLock = false
+
+var isPulling = false
+var pullTarget = null
 
 func _physics_process(_delta: float) -> void:
 	if not(inputLock):
@@ -34,6 +36,11 @@ func get_player_input():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	flashlight()
+	if Input.is_action_pressed("pull"):
+		isPulling = true
+	else:
+		isPulling = false
+		pullTarget = null
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("flashlight"):
@@ -50,5 +57,5 @@ func _on_pickup(_body: Node2D) -> void:
 	$ItemPickupSFX.play()
 
 
-func _on_flashlight_pickup(body: Node2D) -> void:
+func _on_flashlight_pickup(_body: Node2D) -> void:
 	$ItemPickupSFX.play()

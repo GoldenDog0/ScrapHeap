@@ -3,7 +3,7 @@ extends Area2D
 var blink = 0
 var ticker = 0
 
-func _on_body_entered(body: Node2D) -> void:
+func _on_body_entered(_body: Node2D) -> void:
 	self.hide()	
 
 func _process(delta: float) -> void:

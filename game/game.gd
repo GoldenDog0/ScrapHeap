@@ -70,10 +70,12 @@ func gameEnd():
 	get_tree().reload_current_scene()
 
 func _on_warm_area_entered(body: Node2D) -> void:
-	safe = true
+	if body is Player:
+		safe = true
 
 func _on_warm_area_exited(body: Node2D) -> void:
-	safe = false
+	if body is Player:
+		safe = false
 
 func _on_tutorial_exit(body: Node2D) -> void:
 	if body is Player:

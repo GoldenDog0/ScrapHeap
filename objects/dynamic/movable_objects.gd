@@ -15,8 +15,10 @@ func _physics_process(delta: float) -> void:
 		if isPullable:
 			for body in $CollisionShape2D/PullArea.get_overlapping_bodies():
 				if body is Player:
-					var vector := Vector2(body.position-self.position)
-					velocity = vector * 2.5
+					if (body.pullTarget == null or body.pullTarget == self) and body.isPulling:
+						body.pullTarget = self
+						var vector := Vector2(body.position-self.position)
+						velocity = vector * 2.5
 
 	if velocity.length_squared() > 1.0:
 		velocity *= 1.0 - drag * delta
