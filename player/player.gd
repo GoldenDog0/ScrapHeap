@@ -51,11 +51,13 @@ func flashlight():
 	$Flashlight.look_at(mousePos)
 
 func _on_pickup(_body: Node2D) -> void:
-	$Flashlight.battery+=75
-	if $Flashlight.battery > 100:
-		$Flashlight.battery = 100
-	$ItemPickupSFX.play()
+	if _body is Player:
+		$Flashlight.battery+=75
+		if $Flashlight.battery > 100:
+			$Flashlight.battery = 100
+		$ItemPickupSFX.play()
 
 
 func _on_flashlight_pickup(_body: Node2D) -> void:
-	$ItemPickupSFX.play()
+	if _body is Player:
+		$ItemPickupSFX.play()

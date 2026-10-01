@@ -9,6 +9,7 @@ func _process(delta: float) -> void:
 	$PointLight2D.energy = abs(sin(timer*1.5)) * maxLight + minLight
 
 func _on_body_entered(_body) -> void:
-	timer = 0
-	if self.get_meta("tutorial"):
-		self.queue_free()
+	if _body is Player:
+		timer = 0
+		if self.get_meta("tutorial"):
+			self.queue_free()

@@ -19,12 +19,14 @@ var batteryTextures = [
 ]
 
 func _ready() -> void:
+	$Player/Flashlight/Light.enabled = false
 	$"The Real Music".stream_paused = true
 	$Player/Flashlight.batteryChange.connect(_on_battery_change)
 	$CanvasLayer/Centernotify/PopupText.modulate.a = 0.0
 	$CanvasLayer/Centernotify/PopupText.text = ""
 	placeItem($Collectable)
 	placeItem($Pickup2)
+	placeItem($Pickup3)
 	if debug:
 		$Player/Flashlight/Camera2D/CanvasModulate.hide()
 	$CanvasLayer/VBoxContainer/FlashlightDisplay.hide()
@@ -56,6 +58,9 @@ func _process(delta: float) -> void:
 		danger += 80 * delta / dangerLossTime
 	$Player/Texture/PlayerAura.energy = 0.2+0.8-(danger/100)
 	$CanvasLayer/DangerEdgeEffect.modulate.a = (danger)/100
+	$"The Real Music".volume_db = 0 - (danger/3)
+	if danger >= 70:
+		$"The Real Music".volume_db = -1000
 	if danger >= 80:
 		if not(end):
 			gameEnd()
@@ -80,7 +85,8 @@ func _on_warm_area_exited(body: Node2D) -> void:
 func _on_tutorial_exit(body: Node2D) -> void:
 	if body is Player:
 		$"The Real Music".stream_paused = false
-		$"Speaker/Jazzy Vibes".stop()
+		$Speaker.queue_free()
+		$TutorialExitTrigger.queue_free()
 		$"Tilemap Ground/Tilemap Tiles".set_cell(Vector2i(3,0),1,Vector2i(1,7))
 		$"Tilemap Ground/Tilemap Tiles".set_cell(Vector2i(4,0),1,Vector2i(1,7))
 		$CanvasLayer/Centernotify/PopupText.text = "Make it to shelter"
@@ -97,28 +103,35 @@ func _on_exit(body: Node2D) -> void:
 		await get_tree().create_timer(2.0).timeout	
 		get_tree().paused = true
 
-func _on_flashlight_pickup(body: Node2D) -> void:
-	if body is Player:
+func _on_flashlight_pickup(_body: Node2D) -> void:
+	if _body is Player:
+		$Player/Flashlight/Light.enabled = true
 		$CanvasLayer/VBoxContainer/FlashlightDisplay.show()
 		$Player/Flashlight.show()
-		$CanvasLayer/Centernotify/PopupText.text = "Press F to toggle flashlight."
+		$CanvasLayer/Centernotify/PopupText.text = "Press F to toggle flashlight.\nIt has limited battery."
 		fadeIn($CanvasLayer/Centernotify/PopupText)
 		await get_tree().create_timer(10.0).timeout
 		fadeOut($CanvasLayer/Centernotify/PopupText)
 	
 func _on_collectable(_body: Node2D) -> void:
-	score += 1
-	placeItem($Collectable)
-	$Player/Texture/PlayerAura.scale.x += 0.1
-	$Player/Texture/PlayerAura.scale.y += 0.1
-	$Player/ItemPickupSFX.play()
+	if _body is Player:
+		score += 1
+		placeItem($Collectable)
+		$Player/Texture/PlayerAura.scale.x += 0.1
+		$Player/Texture/PlayerAura.scale.y += 0.1
+		$Player/ItemPickupSFX.play()
 		
 func _on_battery_pickup(_body: Node2D) -> void:
-	placeItem($Pickup)
+	if _body is Player:
+		placeItem($Pickup)
 func _on_battery2_pickup(_body: Node2D) -> void: #peak efficiency here :P
-	placeItem($Pickup2) 
+	if _body is Player:
+		placeItem($Pickup2) 
+func _on_battery3_pickup(_body: Node2D) -> void: #peak efficiency here :P
+	if _body is Player:
+		placeItem($Pickup3)	
 
-	
+
 func placeItem(type):
 	var placed = false
 	oldPos = type.position

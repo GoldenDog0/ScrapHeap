@@ -3,11 +3,11 @@ extends Area2D
 var blink = 0
 var ticker = 0
 
-func _on_body_entered(_body: Node2D) -> void:
-	self.hide()	
+func _on_body_entered(body: Node2D) -> void:
+	if body is Player:
+		self.queue_free()
 
 func _process(delta: float) -> void:
-
 	ticker += 0.02 * delta
 	$Light.energy = 0.8 + sin(ticker)/10 - blink
 	blink = 0
