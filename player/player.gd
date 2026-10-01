@@ -48,3 +48,7 @@ func _on_pickup(_body: Node2D) -> void:
 	if $Flashlight.battery > 100:
 		$Flashlight.battery = 100
 	$ItemPickupSFX.play()
+
+
+func _on_flashlight_pickup(body: Node2D) -> void:
+	$ItemPickupSFX.play()

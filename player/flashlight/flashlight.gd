@@ -1,6 +1,6 @@
 extends Sprite2D
 @export_range(0.0,1.0,0.1) var strength := 0.8
-@export_range(0.0,100.0) var battery := 10.0
+@export_range(0.0,100.0) var battery := 2.5
 @export_range(0.0,5.0) var batteryDrainRate := 2.0
 
 signal batteryChange(newBattery: float)
@@ -28,7 +28,7 @@ func _process(delta: float) -> void:
 		state = 0
 		self.texture = flashOff
 		
-	if $Light.enabled:
+	if $Light.enabled and self.visible:
 		if battery>0:
 			battery -= batteryDrainRate * delta
 			ticker += 0.02 * delta

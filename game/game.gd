@@ -8,7 +8,7 @@ var oldPos = Vector2(0,0)
 @onready var placables = [$Pickup, $Pickup2, $Collectable]
 @export var debug := false
 var end = false
-var inTutorial = true
+var safe=true
 
 var batteryTextures = [
 	load("res://player/flashlight/batteryGauge/batterylvl-1.png.png"),
@@ -19,9 +19,10 @@ var batteryTextures = [
 ]
 
 func _ready() -> void:
+	$"The Real Music".stream_paused = true
 	$Player/Flashlight.batteryChange.connect(_on_battery_change)
 	$CanvasLayer/Centernotify/PopupText.modulate.a = 0.0
-	$CanvasLayer/Centernotify/PopupText.text = "Press F to toggle your flashlight.\nThe dark is cold.\nMake it to shelter"
+	$CanvasLayer/Centernotify/PopupText.text = ""
 	placeItem($Collectable)
 	placeItem($Pickup2)
 	if debug:
@@ -48,12 +49,11 @@ func _on_battery_change(newBat):
 
 func _process(delta: float) -> void:
 	timer += delta * 1
-	if $Player/Flashlight/Light.enabled:
+	if $Player/Flashlight/Light.enabled or safe:
 		if danger > 0:
 			danger -= 10 * delta
 	else:
-		if not(inTutorial):
-			danger += 80 * delta / dangerLossTime
+		danger += 80 * delta / dangerLossTime
 	$Player/Texture/PlayerAura.energy = 0.2+0.8-(danger/100)
 	$CanvasLayer/DangerEdgeEffect.modulate.a = (danger)/100
 	if danger >= 80:
@@ -64,19 +64,24 @@ func gameEnd():
 	end = true
 	$Player.inputLock = true
 	$CanvasLayer/Blackscreen/EndText.text = "You were unable to make it to your shelter.\nYou lasted " +str(int(timer)) + " seconds."
+	$CanvasLayer/Blackscreen/DeathSFX.play()
 	fadeIn($CanvasLayer/Blackscreen)
 	await get_tree().create_timer(5.0).timeout
 	get_tree().reload_current_scene()
-	
 
-func _on_safe_zone_area_exited(body: Node2D) -> void:
+func _on_warm_area_entered(body: Node2D) -> void:
+	safe = true
+
+func _on_warm_area_exited(body: Node2D) -> void:
+	safe = false
+
+func _on_tutorial_exit(body: Node2D) -> void:
 	if body is Player:
-		inTutorial=false
-		$CanvasLayer/VBoxContainer/FlashlightDisplay.show()
-		$Player/Flashlight.show()
+		$"The Real Music".stream_paused = false
+		$"Speaker/Jazzy Vibes".stop()
 		$"Tilemap Ground/Tilemap Tiles".set_cell(Vector2i(3,0),1,Vector2i(1,7))
 		$"Tilemap Ground/Tilemap Tiles".set_cell(Vector2i(4,0),1,Vector2i(1,7))
-		print(str(body) + " ended tutorial")
+		$CanvasLayer/Centernotify/PopupText.text = "Make it to shelter"
 		fadeIn($CanvasLayer/Centernotify/PopupText)
 		await get_tree().create_timer(10.0).timeout
 		fadeOut($CanvasLayer/Blackscreen)
@@ -90,6 +95,15 @@ func _on_exit(body: Node2D) -> void:
 		await get_tree().create_timer(2.0).timeout	
 		get_tree().paused = true
 
+func _on_flashlight_pickup(body: Node2D) -> void:
+	if body is Player:
+		$CanvasLayer/VBoxContainer/FlashlightDisplay.show()
+		$Player/Flashlight.show()
+		$CanvasLayer/Centernotify/PopupText.text = "Press F to toggle flashlight."
+		fadeIn($CanvasLayer/Centernotify/PopupText)
+		await get_tree().create_timer(10.0).timeout
+		fadeOut($CanvasLayer/Centernotify/PopupText)
+	
 func _on_collectable(_body: Node2D) -> void:
 	score += 1
 	placeItem($Collectable)

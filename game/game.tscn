@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://ic5vcdb3tslb" path="res://sfx/buttonDown.mp3" id="7_5e03w"]
 [ext_resource type="Script" uid="uid://dnvj7xpwmo7ag" path="res://player/player.gd" id="7_jdpby"]
 [ext_resource type="Texture2D" uid="uid://btivn0e4smpsj" path="res://player/player.png" id="8_58yx1"]
-[ext_resource type="Script" uid="uid://cpnye5i7mwmeu" path="res://game/tutorial_label.gd" id="8_q52ks"]
+[ext_resource type="Script" uid="uid://cpnye5i7mwmeu" path="res://objects/tutorial_label.gd" id="8_q52ks"]
 [ext_resource type="Texture2D" uid="uid://c7qp08fcsgmmj" path="res://player/flashlight/flashOn.png" id="9_hbvmx"]
 [ext_resource type="Script" uid="uid://cj6d7c58hq2ss" path="res://player/flashlight/flashlight.gd" id="10_fegy3"]
 [ext_resource type="AudioStream" uid="uid://cto63bdsihyg3" path="res://sfx/flashlightClick.mp3" id="11_pvdu1"]
@@ -24,8 +24,13 @@
 [ext_resource type="Texture2D" uid="uid://bmq3227urqlfv" path="res://objects/dynamic/sparkle.png" id="20_ta815"]
 [ext_resource type="Texture2D" uid="uid://bp5og1t8bob1e" path="res://player/flashlight/batteryGauge/batterylvl-5.png.png" id="21_64wtb"]
 [ext_resource type="AudioStream" uid="uid://ds8fojlo4nqlw" path="res://sfx/bgWind.mp3" id="22_0rekh"]
+[ext_resource type="Script" uid="uid://dromqwwc5b1x8" path="res://player/flashlight/flashlight_pickup.gd" id="23_jdpby"]
 [ext_resource type="Texture2D" uid="uid://cd2uctsmphgai" path="res://objects/static/heatLamp.png" id="24_8bboj"]
 [ext_resource type="Script" uid="uid://bl4hy843we5cf" path="res://objects/static/heat_lamp.gd" id="24_leid8"]
+[ext_resource type="AudioStream" uid="uid://w8g7ncwwt1g0" path="res://sfx/DeathSFX.mp3" id="25_fegy3"]
+[ext_resource type="AudioStream" uid="uid://comtgbiqlsyob" path="res://sfx/ScrapersFreeze.mp3" id="26_hbvmx"]
+[ext_resource type="Texture2D" uid="uid://chd2ytxa56vj0" path="res://objects/static/speaker.png" id="28_58yx1"]
+[ext_resource type="AudioStream" uid="uid://dxgj6u5uycqvb" path="res://sfx/tutorialJazz.mp3" id="29_hbvmx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lc2xo"]
 texture = ExtResource("2_5e03w")
@@ -297,10 +302,6 @@ hue_variation_max = 0.09999997
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fc0e3"]
 light_mode = 1
 
-[sub_resource type="GDScript" id="GDScript_iotsf"]
-script/source = "extends Sprite2D
-"
-
 [sub_resource type="Gradient" id="Gradient_7jktm"]
 offsets = PackedFloat32Array(0, 0.30722892)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -386,6 +387,12 @@ gradient = SubResource("Gradient_lc2xo")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hbvmx"]
+light_mode = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8xqfg"]
+size = Vector2(200, 200)
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_iotsf"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lqcak"]
@@ -399,6 +406,15 @@ orbit_velocity_min = 1.0000001
 orbit_velocity_max = 1.0000001
 gravity = Vector3(0, 0, 0)
 scale_max = 3.0
+
+[sub_resource type="Gradient" id="Gradient_jdpby"]
+offsets = PackedFloat32Array(0.40361446, 0.5, 0.59638554)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rdqq5"]
+gradient = SubResource("Gradient_jdpby")
+fill = 3
+fill_from = Vector2(0.41304347, 0.5782609)
 
 [sub_resource type="LabelSettings" id="LabelSettings_mhvfb"]
 font_size = 12
@@ -436,15 +452,19 @@ gradient = SubResource("Gradient_5e03w")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8xqfg"]
-size = Vector2(768, 488)
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jdpby"]
+light_mode = 1
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_55par"]
-radius = 95.036835
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gipk8"]
+size = Vector2(200, 20)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_58yx1"]
+light_mode = 1
 
 [node name="Game" type="Node2D" unique_id=1728191929]
 texture_filter = 1
 script = ExtResource("1_mhvfb")
+dangerLossTime = 15
 
 [node name="Tilemap Ground" type="TileMapLayer" parent="." unique_id=624318605]
 tile_map_data = PackedByteArray("AAD//wAAAQABAAEAAAD//wEAAQABAAEAAAD//wIAAQABAAEAAAD//wMAAQABAAEAAAD//wQAAQABAAEAAAD//wUAAQABAAEAAAD//wYAAQABAAEAAAD//wcAAQABAAEAAAD//wgAAQABAAEAAAD//wkAAQABAAEAAAAAAAAAAQABAAEAAAAAAAEAAQABAAEAAAAAAAIAAQABAAEAAAAAAAMAAQABAAEAAAAAAAQAAQABAAEAAAAAAAUAAQABAAEAAAAAAAYAAQABAAEAAAAAAAcAAQABAAEAAAAAAAgAAQABAAEAAAAAAAkAAQABAAEAAAABAAAAAQABAAEAAAABAAEAAQABAAEAAAABAAIAAQABAAEAAAABAAMAAQABAAEAAAABAAQAAQABAAEAAAABAAUAAQABAAEAAAABAAYAAQABAAEAAAABAAcAAQABAAEAAAABAAgAAQABAAEAAAABAAkAAQABAAEAAAACAAAAAQABAAEAAAACAAEAAQABAAEAAAACAAIAAQABAAEAAAACAAMAAQABAAEAAAACAAQAAQABAAEAAAACAAUAAQABAAEAAAACAAYAAQABAAEAAAACAAcAAQABAAEAAAACAAgAAQABAAEAAAACAAkAAQABAAEAAAADAAAAAQABAAEAAAADAAEAAQABAAEAAAADAAIAAQABAAEAAAADAAMAAQABAAEAAAADAAQAAQABAAEAAAADAAUAAQABAAEAAAADAAYAAQABAAEAAAADAAcAAQABAAEAAAADAAgAAQABAAEAAAADAAkAAQABAAEAAAAEAAAAAQABAAEAAAAEAAEAAQABAAEAAAAEAAIAAQABAAEAAAAEAAMAAQABAAEAAAAEAAQAAQABAAEAAAAEAAUAAQABAAEAAAAEAAYAAQABAAEAAAAEAAcAAQABAAEAAAAEAAgAAQABAAEAAAAEAAkAAQABAAEAAAAFAAAAAQABAAEAAAAFAAEAAQABAAEAAAAFAAIAAQABAAEAAAAFAAMAAQABAAEAAAAFAAQAAQABAAEAAAAFAAUAAQABAAEAAAAFAAYAAQABAAEAAAAFAAcAAQABAAEAAAAFAAgAAQABAAEAAAAFAAkAAQABAAEAAAAGAAAAAQABAAEAAAAGAAEAAQABAAEAAAAGAAIAAQABAAEAAAAGAAMAAQABAAEAAAAGAAQAAQABAAEAAAAGAAUAAQABAAEAAAAGAAYAAQABAAEAAAAGAAcAAQABAAEAAAAGAAgAAQABAAEAAAAGAAkAAQABAAEAAAAHAAAAAQABAAEAAAAHAAEAAQABAAEAAAAHAAIAAQABAAEAAAAHAAMAAQABAAEAAAAHAAQAAQABAAEAAAAHAAUAAQABAAEAAAAHAAYAAQABAAEAAAAHAAcAAQABAAEAAAAHAAgAAQABAAEAAAAHAAkAAQABAAEAAAAIAAAAAQABAAEAAAAIAAEAAQABAAEAAAAIAAIAAQABAAEAAAAIAAMAAQABAAEAAAAIAAQAAQABAAEAAAAIAAUAAQABAAEAAAAIAAYAAQABAAEAAAAIAAcAAQABAAEAAAAIAAgAAQABAAEAAAAIAAkAAQABAAEAAAAJAAAAAQABAAEAAAAJAAEAAQABAAEAAAAJAAIAAQABAAEAAAAJAAMAAQABAAEAAAAJAAQAAQABAAEAAAAJAAUAAQABAAEAAAAJAAYAAQABAAEAAAAJAAcAAQABAAEAAAAJAAgAAQABAAEAAAAJAAkAAQABAAEAAAAKAAAAAQABAAEAAAAKAAEAAQABAAEAAAAKAAIAAQABAAEAAAAKAAMAAQABAAEAAAAKAAQAAQABAAEAAAAKAAUAAQABAAEAAAAKAAYAAQABAAEAAAAKAAcAAQABAAEAAAAKAAgAAQABAAEAAAAKAAkAAQABAAEAAAALAAAAAQABAAEAAAALAAEAAQABAAEAAAALAAIAAQABAAEAAAALAAMAAQABAAEAAAALAAQAAQABAAEAAAALAAUAAQABAAEAAAALAAYAAQABAAEAAAALAAcAAQABAAEAAAALAAgAAQABAAEAAAALAAkAAQABAAEAAAAMAAAAAQABAAEAAAAMAAEAAQABAAEAAAAMAAIAAQABAAEAAAAMAAMAAQABAAEAAAAMAAQAAQABAAEAAAAMAAUAAQABAAEAAAAMAAYAAQABAAEAAAAMAAcAAQABAAEAAAAMAAgAAQABAAEAAAAMAAkAAQABAAEAAAANAAAAAQABAAEAAAANAAEAAQABAAEAAAANAAIAAQABAAEAAAANAAMAAQABAAEAAAANAAQAAQABAAEAAAANAAUAAQABAAEAAAANAAYAAQABAAEAAAANAAcAAQABAAEAAAANAAgAAQABAAEAAAANAAkAAQABAAEAAAAOAAAAAQABAAEAAAAOAAEAAQABAAEAAAAOAAIAAQABAAEAAAAOAAMAAQABAAEAAAAOAAQAAQABAAEAAAAOAAUAAQABAAEAAAAOAAYAAQABAAEAAAAOAAcAAQABAAEAAAAOAAgAAQABAAEAAAAOAAkAAQABAAEAAAAPAAAAAQABAAEAAAAPAAEAAQABAAEAAAAPAAIAAQABAAEAAAAPAAMAAQABAAEAAAAPAAQAAQABAAEAAAAPAAUAAQABAAEAAAAPAAYAAQABAAEAAAAPAAcAAQABAAEAAAAPAAgAAQABAAEAAAAPAAkAAQABAAEAAAAQAAAAAQABAAEAAAAQAAEAAQAKAAIAAAAQAAIAAQABAAEAAAAQAAMAAQABAAEAAAAQAAQAAQABAAEAAAAQAAUAAQABAAEAAAAQAAYAAQABAAEAAAAQAAcAAQABAAEAAAAQAAgAAQABAAEAAAAQAAkAAQABAAEAAAARAAAAAQABAAEAAAARAAEAAQAKAAIAAAARAAIAAQAKAAIAAAARAAMAAQAFAAIAAAARAAQAAQABAAEAAAARAAUAAQABAAEAAAARAAYAAQABAAEAAAARAAcAAQABAAEAAAARAAgAAQABAAEAAAARAAkAAQABAAEAAAASAAAAAQABAAEAAAASAAEAAQAKAAIAAAASAAIAAQAKAAIAAAASAAMAAQAFAAIAAAASAAQAAQABAAEAAAASAAUAAQABAAEAAAASAAYAAQABAAEAAAASAAcAAQABAAEAAAASAAgAAQABAAEAAAASAAkAAQABAAEAAAATAAAAAQABAAEAAAATAAEAAQAKAAIAAAATAAIAAQAKAAIAAAATAAMAAQAFAAIAAAATAAQAAQABAAEAAAATAAUAAQABAAEAAAATAAYAAQABAAEAAAATAAcAAQABAAEAAAATAAgAAQABAAEAAAATAAkAAQABAAEAAAAUAAAAAQABAAEAAAAUAAEAAQABAAEAAAAUAAIAAQABAAEAAAAUAAMAAQABAAEAAAAUAAQAAQABAAEAAAAUAAUAAQABAAEAAAAUAAYAAQABAAEAAAAUAAcAAQABAAEAAAAUAAgAAQABAAEAAAAUAAkAAQABAAEAAAAVAAAAAQABAAEAAAAVAAEAAQABAAEAAAAVAAIAAQABAAEAAAAVAAMAAQABAAEAAAAVAAQAAQABAAEAAAAVAAUAAQABAAEAAAAVAAYAAQABAAEAAAAVAAcAAQABAAEAAAAVAAgAAQABAAEAAAAVAAkAAQABAAEAAAAWAAAAAQABAAEAAAAWAAEAAQABAAEAAAAWAAIAAQABAAEAAAAWAAMAAQABAAEAAAAWAAQAAQABAAEAAAAWAAUAAQABAAEAAAAWAAYAAQABAAEAAAAWAAcAAQABAAEAAAAWAAgAAQABAAEAAAAWAAkAAQABAAEAAAAXAAAAAQABAAEAAAAXAAEAAQABAAEAAAAXAAIAAQABAAEAAAAXAAMAAQABAAEAAAAXAAQAAQABAAEAAAAXAAUAAQABAAEAAAAXAAYAAQABAAEAAAAXAAcAAQABAAEAAAAXAAgAAQABAAEAAAAXAAkAAQABAAEAAAAYAAAAAQABAAEAAAAYAAEAAQABAAEAAAAYAAIAAQABAAEAAAAYAAMAAQABAAEAAAAYAAQAAQABAAEAAAAYAAUAAQABAAEAAAAYAAYAAQABAAEAAAAYAAcAAQABAAEAAAAYAAgAAQABAAEAAAAYAAkAAQABAAEAAAAZAAAAAQABAAEAAAAZAAEAAQABAAEAAAAZAAIAAQABAAEAAAAZAAMAAQABAAEAAAAZAAQAAQABAAEAAAAZAAUAAQABAAEAAAAZAAYAAQABAAEAAAAZAAcAAQABAAEAAAAZAAgAAQABAAEAAAAZAAkAAQABAAEAAAAaAAAAAQABAAEAAAAaAAEAAQABAAEAAAAaAAIAAQABAAEAAAAaAAMAAQABAAEAAAAaAAQAAQABAAEAAAAaAAUAAQABAAEAAAAaAAYAAQABAAEAAAAaAAcAAQABAAEAAAAaAAgAAQABAAEAAAAaAAkAAQABAAEAAAAbAAAAAQABAAEAAAAbAAEAAQABAAEAAAAbAAIAAQABAAEAAAAbAAMAAQABAAEAAAAbAAQAAQABAAEAAAAbAAUAAQABAAEAAAAbAAYAAQABAAEAAAAbAAcAAQABAAEAAAAbAAgAAQABAAEAAAAbAAkAAQABAAEAAAAcAAAAAQABAAEAAAAcAAEAAQABAAEAAAAcAAIAAQABAAEAAAAcAAMAAQABAAEAAAAcAAQAAQABAAEAAAAcAAUAAQABAAEAAAAcAAYAAQABAAEAAAAcAAcAAQABAAEAAAAcAAgAAQABAAEAAAAcAAkAAQABAAEAAAD//woAAQABAAEAAAD//wsAAQABAAEAAAD//wwAAQABAAEAAAD//w0AAQABAAEAAAD//w4AAQABAAEAAAD//w8AAQABAAEAAAD//xAAAQABAAEAAAD//xEAAQABAAEAAAD//xIAAQABAAEAAAAAAAoAAQABAAEAAAAAAAsAAQABAAEAAAAAAAwAAQABAAEAAAAAAA0AAQABAAEAAAAAAA4AAQABAAEAAAAAAA8AAQABAAEAAAAAABAAAQABAAEAAAAAABEAAQABAAEAAAAAABIAAQABAAEAAAABAAoAAQABAAEAAAABAAsAAQABAAEAAAABAAwAAQABAAEAAAABAA0AAQABAAEAAAABAA4AAQABAAEAAAABAA8AAQABAAEAAAABABAAAQABAAEAAAABABEAAQABAAEAAAABABIAAQABAAEAAAACAAoAAQABAAEAAAACAAsAAQABAAEAAAACAAwAAQABAAEAAAACAA0AAQABAAEAAAACAA4AAQABAAEAAAACAA8AAQABAAEAAAACABAAAQABAAEAAAACABEAAQABAAEAAAACABIAAQABAAEAAAADAAoAAQABAAEAAAADAAsAAQABAAEAAAADAAwAAQABAAEAAAADAA0AAQABAAEAAAADAA4AAQABAAEAAAADAA8AAQABAAEAAAADABAAAQABAAEAAAADABEAAQABAAEAAAADABIAAQABAAEAAAAEAAoAAQABAAEAAAAEAAsAAQABAAEAAAAEAAwAAQABAAEAAAAEAA0AAQABAAEAAAAEAA4AAQABAAEAAAAEAA8AAQABAAEAAAAEABAAAQABAAEAAAAEABEAAQABAAEAAAAEABIAAQABAAEAAAAFAAoAAQABAAEAAAAFAAsAAQABAAEAAAAFAAwAAQABAAEAAAAFAA0AAQABAAEAAAAFAA4AAQABAAEAAAAFAA8AAQABAAEAAAAFABAAAQABAAEAAAAFABEAAQABAAEAAAAFABIAAQABAAEAAAAGAAoAAQABAAEAAAAGAAsAAQABAAEAAAAGAAwAAQABAAEAAAAGAA0AAQABAAEAAAAGAA4AAQABAAEAAAAGAA8AAQABAAEAAAAGABAAAQABAAEAAAAGABEAAQABAAEAAAAGABIAAQABAAEAAAAHAAoAAQABAAEAAAAHAAsAAQABAAEAAAAHAAwAAQABAAEAAAAHAA0AAQABAAEAAAAHAA4AAQABAAEAAAAHAA8AAQABAAEAAAAHABAAAQABAAEAAAAHABEAAQABAAEAAAAHABIAAQABAAEAAAAIAAoAAQABAAEAAAAIAAsAAQABAAEAAAAIAAwAAQABAAEAAAAIAA0AAQABAAEAAAAIAA4AAQABAAEAAAAIAA8AAQABAAEAAAAIABAAAQABAAEAAAAIABEAAQABAAEAAAAIABIAAQABAAEAAAAJAAoAAQABAAEAAAAJAAsAAQABAAEAAAAJAAwAAQABAAEAAAAJAA0AAQABAAEAAAAJAA4AAQABAAEAAAAJAA8AAQABAAEAAAAJABAAAQABAAEAAAAJABEAAQABAAEAAAAJABIAAQABAAEAAAAKAAoAAQABAAEAAAAKAAsAAQABAAEAAAAKAAwAAQABAAEAAAAKAA0AAQABAAEAAAAKAA4AAQABAAEAAAAKAA8AAQABAAEAAAAKABAAAQABAAEAAAAKABEAAQABAAEAAAAKABIAAQABAAEAAAALAAoAAQABAAEAAAALAAsAAQABAAEAAAALAAwAAQABAAEAAAALAA0AAQABAAEAAAALAA4AAQABAAEAAAALAA8AAQABAAEAAAALABAAAQABAAEAAAALABEAAQABAAEAAAALABIAAQABAAEAAAAMAAoAAQABAAEAAAAMAAsAAQABAAEAAAAMAAwAAQABAAEAAAAMAA0AAQABAAEAAAAMAA4AAQABAAEAAAAMAA8AAQABAAEAAAAMABAAAQABAAEAAAAMABEAAQABAAEAAAAMABIAAQABAAEAAAANAAoAAQABAAEAAAANAAsAAQABAAEAAAANAAwAAQABAAEAAAANAA0AAQABAAEAAAANAA4AAQABAAEAAAANAA8AAQABAAEAAAANABAAAQABAAEAAAANABEAAQABAAEAAAANABIAAQABAAEAAAAOAAoAAQABAAEAAAAOAAsAAQABAAEAAAAOAAwAAQABAAEAAAAOAA0AAQABAAEAAAAOAA4AAQABAAEAAAAOAA8AAQABAAEAAAAOABAAAQABAAEAAAAOABEAAQABAAEAAAAOABIAAQABAAEAAAAPAAoAAQABAAEAAAAPAAsAAQABAAEAAAAPAAwAAQABAAEAAAAPAA0AAQABAAEAAAAPAA4AAQABAAEAAAAPAA8AAQABAAEAAAAPABAAAQABAAEAAAAPABEAAQABAAEAAAAPABIAAQABAAEAAAAQAAoAAQABAAEAAAAQAAsAAQABAAEAAAAQAAwAAQABAAEAAAAQAA0AAQABAAEAAAAQAA4AAQABAAEAAAAQAA8AAQABAAEAAAAQABAAAQABAAEAAAAQABEAAQABAAEAAAAQABIAAQABAAEAAAARAAoAAQABAAEAAAARAAsAAQABAAEAAAARAAwAAQABAAEAAAARAA0AAQABAAEAAAARAA4AAQABAAEAAAARAA8AAQABAAEAAAARABAAAQABAAEAAAARABEAAQABAAEAAAARABIAAQABAAEAAAASAAoAAQABAAEAAAASAAsAAQABAAEAAAASAAwAAQABAAEAAAASAA0AAQABAAEAAAASAA4AAQABAAEAAAASAA8AAQABAAEAAAASABAAAQABAAEAAAASABEAAQABAAEAAAASABIAAQABAAEAAAATAAoAAQABAAEAAAATAAsAAQABAAEAAAATAAwAAQABAAEAAAATAA0AAQABAAEAAAATAA4AAQABAAEAAAATAA8AAQABAAEAAAATABAAAQABAAEAAAATABEAAQABAAEAAAATABIAAQABAAEAAAAUAAoAAQABAAEAAAAUAAsAAQABAAEAAAAUAAwAAQABAAEAAAAUAA0AAQABAAEAAAAUAA4AAQABAAEAAAAUAA8AAQABAAEAAAAUABAAAQABAAEAAAAUABEAAQABAAEAAAAUABIAAQABAAEAAAAVAAoAAQABAAEAAAAVAAsAAQABAAEAAAAVAAwAAQABAAEAAAAVAA0AAQABAAEAAAAVAA4AAQABAAEAAAAVAA8AAQABAAEAAAAVABAAAQABAAEAAAAVABEAAQABAAEAAAAVABIAAQABAAEAAAAWAAoAAQABAAEAAAAWAAsAAQABAAEAAAAWAAwAAQABAAEAAAAWAA0AAQABAAEAAAAWAA4AAQABAAEAAAAWAA8AAQABAAEAAAAWABAAAQABAAEAAAAWABEAAQABAAEAAAAWABIAAQABAAEAAAAXAAoAAQABAAEAAAAXAAsAAQABAAEAAAAXAAwAAQABAAEAAAAXAA0AAQABAAEAAAAXAA4AAQABAAEAAAAXAA8AAQABAAEAAAAXABAAAQABAAEAAAAXABEAAQABAAEAAAAXABIAAQABAAEAAAAYAAoAAQABAAEAAAAYAAsAAQABAAEAAAAYAAwAAQABAAEAAAAYAA0AAQABAAEAAAAYAA4AAQABAAEAAAAYAA8AAQABAAEAAAAYABAAAQABAAEAAAAYABEAAQABAAEAAAAYABIAAQABAAEAAAAZAAoAAQABAAEAAAAZAAsAAQABAAEAAAAZAAwAAQABAAEAAAAZAA0AAQABAAEAAAAZAA4AAQABAAEAAAAZAA8AAQABAAEAAAAZABAAAQABAAEAAAAZABEAAQABAAEAAAAZABIAAQABAAEAAAAaAAoAAQABAAEAAAAaAAsAAQABAAEAAAAaAAwAAQABAAEAAAAaAA0AAQABAAEAAAAaAA4AAQABAAEAAAAaAA8AAQABAAEAAAAaABAAAQABAAEAAAAaABEAAQABAAEAAAAaABIAAQABAAEAAAAbAAoAAQABAAEAAAAbAAsAAQABAAEAAAAbAAwAAQABAAEAAAAbAA0AAQABAAEAAAAbAA4AAQABAAEAAAAbAA8AAQABAAEAAAAbABAAAQABAAEAAAAbABEAAQABAAEAAAAbABIAAQABAAEAAAAcAAoAAQABAAEAAAAcAAsAAQABAAEAAAAcAAwAAQABAAEAAAAcAA0AAQABAAEAAAAcAA4AAQABAAEAAAAcAA8AAQABAAEAAAAcABAAAQABAAEAAAAcABEAAQABAAEAAAAcABIAAQABAAEAAAD/////AQAKAAIAAAAAAP//AQAKAAIAAAABAP//AQAKAAIAAAACAP//AQAKAAIAAAADAP//AQAFAAIAAAAEAP//AQAFAAIAAAAFAP//AQAKAAIAAAAGAP//AQAKAAIAAAAHAP//AQAKAAIAAAAHAP7/AQAKAAIAAAAHAP3/AQAKAAIAAAAHAPz/AQAKAAIAAAAHAPv/AQAKAAIAAAAHAPr/AQAKAAIAAAAHAPn/AQAKAAIAAAAHAPj/AQAKAAIAAAAGAPj/AQAKAAIAAAAFAPj/AQAKAAIAAAAEAPj/AQAKAAIAAAADAPj/AQAKAAIAAAACAPj/AQAKAAIAAAABAPj/AQAKAAIAAAAAAPj/AQAKAAIAAAD///j/AQAKAAIAAAD///n/AQAKAAIAAAD///r/AQAKAAIAAAD///v/AQAKAAIAAAD///z/AQAKAAIAAAD///3/AQAKAAIAAAD///7/AQAKAAIAAAAAAP7/AQAKAAIAAAABAP7/AQAKAAIAAAACAP7/AQAKAAIAAAADAP7/AQAKAAIAAAAEAP7/AQAKAAIAAAAFAP7/AQAKAAIAAAAGAP7/AQAKAAIAAAAGAP3/AQAKAAIAAAAGAPr/AQAKAAIAAAAGAPn/AQAKAAIAAAAGAPv/AQAKAAIAAAAGAPz/AQAKAAIAAAAFAPz/AQAKAAIAAAAEAPz/AQAKAAIAAAADAPz/AQAKAAIAAAACAPz/AQAKAAIAAAABAPz/AQAKAAIAAAADAP3/AQAKAAIAAAAEAP3/AQAKAAIAAAAFAP3/AQAKAAIAAAACAP3/AQAKAAIAAAAAAPz/AQAKAAIAAAAAAP3/AQAKAAIAAAABAP3/AQAKAAIAAAABAPv/AQAKAAIAAAABAPr/AQAKAAIAAAAAAPr/AQAKAAIAAAAAAPn/AQAKAAIAAAAAAPv/AQAKAAIAAAADAPv/AQAKAAIAAAAEAPv/AQAKAAIAAAAFAPv/AQAKAAIAAAAFAPn/AQAKAAIAAAADAPn/AQAKAAIAAAACAPn/AQAKAAIAAAABAPn/AQAKAAIAAAACAPr/AQAKAAIAAAADAPr/AQAKAAIAAAAEAPr/AQAKAAIAAAACAPv/AQAKAAIAAAAFAPr/AQAKAAIAAAAEAPn/AQAKAAIAAAAIAPn/AQAKAAIAAAAJAPn/AQAKAAIAAAAKAPn/AQAKAAIAAAAKAPr/AQAKAAIAAAALAPr/AQAKAAIAAAAJAPr/AQAKAAIAAAAIAPr/AQAKAAIAAAAIAPv/AQAKAAIAAAAIAPz/AQAKAAIAAAAIAP3/AQAKAAIAAAAIAP7/AQAKAAIAAAAIAP//AQAKAAIAAAAJAP//AQAKAAIAAAAKAP//AQAKAAIAAAALAP//AQAKAAIAAAAMAP//AQAKAAIAAAAMAP7/AQAKAAIAAAAMAP3/AQAKAAIAAAAMAPz/AQAKAAIAAAAMAPv/AQAKAAIAAAAMAPr/AQAKAAIAAAAMAPn/AQAKAAIAAAAMAPj/AQAKAAIAAAALAPj/AQAKAAIAAAAKAPj/AQAKAAIAAAAJAPj/AQAKAAIAAAAIAPj/AQAKAAIAAAALAPn/AQAKAAIAAAALAPv/AQAKAAIAAAALAPz/AQAKAAIAAAALAP3/AQAKAAIAAAALAP7/AQAKAAIAAAAKAP7/AQAKAAIAAAAJAP7/AQAKAAIAAAAJAP3/AQAKAAIAAAAJAPz/AQAKAAIAAAAJAPv/AQAKAAIAAAAKAPv/AQAKAAIAAAAKAPz/AQAKAAIAAAAKAP3/AQAKAAIAAAA=")
@@ -529,7 +549,7 @@ stream = ExtResource("7_5e03w")
 pitch_scale = 0.9
 
 [node name="Button" type="Area2D" parent="." unique_id=956025050]
-position = Vector2(833, 126)
+position = Vector2(876, 83)
 script = ExtResource("5_q52ks")
 metadata/tutorial = false
 
@@ -579,32 +599,6 @@ stream = ExtResource("7_5e03w")
 stream = ExtResource("7_5e03w")
 pitch_scale = 0.9
 
-[node name="Button3" type="Area2D" parent="." unique_id=2107183259]
-position = Vector2(1737, 821)
-script = ExtResource("5_q52ks")
-metadata/tutorial = false
-
-[node name="Sprite2D" type="Sprite2D" parent="Button3" unique_id=435762853]
-texture = ExtResource("6_jucfl")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Button3" unique_id=925043492]
-position = Vector2(0, -2)
-shape = SubResource("RectangleShape2D_1bktw")
-
-[node name="PointLight2D" type="PointLight2D" parent="Button3" unique_id=1309170808]
-position = Vector2(0, -4)
-color = Color(0.70980394, 0, 0, 1)
-shadow_enabled = true
-texture = SubResource("GradientTexture2D_1bktw")
-texture_scale = 2.0
-
-[node name="ButtonPress" type="AudioStreamPlayer2D" parent="Button3" unique_id=585524293]
-stream = ExtResource("7_5e03w")
-
-[node name="ButtonDepress" type="AudioStreamPlayer2D" parent="Button3" unique_id=870651459]
-stream = ExtResource("7_5e03w")
-pitch_scale = 0.9
-
 [node name="Player" type="CharacterBody2D" parent="." unique_id=1364111499]
 position = Vector2(31, -401)
 motion_mode = 1
@@ -639,7 +633,6 @@ material = SubResource("CanvasItemMaterial_fc0e3")
 position = Vector2(-2, -4)
 scale = Vector2(2, 2)
 texture = ExtResource("8_58yx1")
-script = SubResource("GDScript_iotsf")
 
 [node name="PlayerAura" type="PointLight2D" parent="Player/Texture" unique_id=2016580632]
 texture = SubResource("GradientTexture2D_xeqcf")
@@ -656,6 +649,7 @@ batteryDrainRate = 3.0
 [node name="Click" type="AudioStreamPlayer2D" parent="Player/Flashlight" unique_id=403259447]
 scale = Vector2(0.99999994, 0.99999994)
 stream = ExtResource("11_pvdu1")
+volume_db = -3.0
 
 [node name="Light" type="PointLight2D" parent="Player/Flashlight" unique_id=1683087101]
 position = Vector2(1.5084991, 0)
@@ -764,7 +758,7 @@ position = Vector2(0, -2)
 shape = SubResource("RectangleShape2D_ympwx")
 
 [node name="MoveableObject" type="CharacterBody2D" parent="." unique_id=1135824450]
-position = Vector2(950, 587)
+position = Vector2(1670, 861)
 script = ExtResource("14_gvtgv")
 drag = 7.0
 metadata/tutorial = false
@@ -809,8 +803,9 @@ occluder = SubResource("OccluderPolygon2D_55par")
 editor_only = true
 
 [node name="Pickup" type="Area2D" parent="." unique_id=207768762]
-position = Vector2(249, 128)
+position = Vector2(548, 87)
 script = ExtResource("17_vkvnp")
+metadata/tutorial = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Pickup" unique_id=669804846]
 texture = ExtResource("18_urpib")
@@ -832,6 +827,7 @@ texture = SubResource("GradientTexture2D_gipk8")
 [node name="Pickup2" type="Area2D" parent="." unique_id=1567263336]
 position = Vector2(1250, 1058)
 script = ExtResource("17_vkvnp")
+metadata/tutorial = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Pickup2" unique_id=561774393]
 texture = ExtResource("18_urpib")
@@ -850,6 +846,45 @@ process_material = SubResource("ParticleProcessMaterial_gipk8")
 [node name="PointLight2D" type="PointLight2D" parent="Pickup2" unique_id=1007310713]
 texture = SubResource("GradientTexture2D_gipk8")
 
+[node name="Tutorial Battery" type="Area2D" parent="." unique_id=250303556]
+position = Vector2(244, -120)
+script = ExtResource("17_vkvnp")
+metadata/tutorial = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Tutorial Battery" unique_id=1285955973]
+texture = ExtResource("18_urpib")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tutorial Battery" unique_id=1344323436]
+shape = SubResource("RectangleShape2D_55par")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Tutorial Battery" unique_id=827557673]
+material = SubResource("CanvasItemMaterial_4b5bx")
+amount = 1
+texture = SubResource("GradientTexture2D_ympwx")
+lifetime = 0.3
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_gipk8")
+
+[node name="PointLight2D" type="PointLight2D" parent="Tutorial Battery" unique_id=69009246]
+texture = SubResource("GradientTexture2D_gipk8")
+
+[node name="TutorialLabel" type="Area2D" parent="Tutorial Battery" unique_id=925996221]
+script = ExtResource("8_q52ks")
+
+[node name="Text" type="Label" parent="Tutorial Battery/TutorialLabel" unique_id=755974891]
+z_index = 1
+material = SubResource("CanvasItemMaterial_hbvmx")
+offset_left = -98.0
+offset_top = -61.0
+offset_right = 102.0
+offset_bottom = -12.0
+text = "Find batteries to recharge
+your flashlight"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tutorial Battery/TutorialLabel" unique_id=1217764708]
+shape = SubResource("RectangleShape2D_8xqfg")
+
 [node name="Collectable" type="Area2D" parent="." unique_id=729171074]
 position = Vector2(990, 412)
 script = ExtResource("19_cieqw")
@@ -866,6 +901,29 @@ shape = SubResource("RectangleShape2D_55par")
 [node name="GPUParticles2D" type="GPUParticles2D" parent="Collectable" unique_id=169550000]
 amount = 6
 process_material = SubResource("ParticleProcessMaterial_lqcak")
+
+[node name="FlashlightPickup" type="Area2D" parent="." unique_id=1891200350]
+position = Vector2(705, -260.99997)
+rotation = 0.49916416
+scale = Vector2(1.5, 1.5)
+script = ExtResource("23_jdpby")
+
+[node name="Sprite" type="Sprite2D" parent="FlashlightPickup" unique_id=141833848]
+material = SubResource("CanvasItemMaterial_iotsf")
+position = Vector2(0, -1)
+texture = ExtResource("9_hbvmx")
+offset = Vector2(0.5, 1.5)
+
+[node name="Collect Range" type="CollisionShape2D" parent="FlashlightPickup" unique_id=1318672410]
+shape = SubResource("RectangleShape2D_55par")
+
+[node name="Light" type="PointLight2D" parent="FlashlightPickup" unique_id=1316714261]
+position = Vector2(-26.865719, 1.7979008)
+rotation = -2.5307274
+scale = Vector2(2.9999998, 2.9999998)
+energy = 0.85
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_rdqq5")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=509460630]
 
@@ -928,6 +986,10 @@ label_settings = SubResource("LabelSettings_lqcak")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="DeathSFX" type="AudioStreamPlayer2D" parent="CanvasLayer/Blackscreen" unique_id=420149111]
+stream = ExtResource("25_fegy3")
+panning_strength = 0.0
+
 [node name="DangerEdgeEffect" type="TextureRect" parent="CanvasLayer" unique_id=2117237214]
 modulate = Color(1, 1, 1, 0)
 offset_right = 40.0
@@ -947,9 +1009,15 @@ texture_scale = 13.7
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exit" unique_id=1016754923]
 shape = SubResource("RectangleShape2D_7pcdi")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=852990423]
+[node name="Wind" type="AudioStreamPlayer" parent="." unique_id=852990423]
 stream = ExtResource("22_0rekh")
 volume_db = -22.085
+autoplay = true
+parameters/looping = true
+
+[node name="The Real Music" type="AudioStreamPlayer" parent="." unique_id=1932509555]
+stream = ExtResource("26_hbvmx")
+volume_db = -4.0
 autoplay = true
 parameters/looping = true
 
@@ -965,6 +1033,28 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_8xqfg")
 texture_scale = 28.56
 
+[node name="TutorialLabel" type="Area2D" parent="HeatLamp2" unique_id=1786223551]
+z_index = 1
+material = SubResource("CanvasItemMaterial_jdpby")
+script = ExtResource("8_q52ks")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HeatLamp2/TutorialLabel" unique_id=2026706729]
+position = Vector2(-17, 243)
+shape = SubResource("RectangleShape2D_gipk8")
+
+[node name="Text" type="Label" parent="HeatLamp2/TutorialLabel" unique_id=1540820202]
+z_index = 1
+material = SubResource("CanvasItemMaterial_58yx1")
+offset_left = -33.0
+offset_top = 36.0
+offset_right = 107.0
+offset_bottom = 85.0
+offset_transform_enabled = true
+offset_transform_rotation = -1.5707964
+text = "Light protects you
+from the cold"
+horizontal_alignment = 1
+
 [node name="HeatLamp" type="Sprite2D" parent="." unique_id=929919867]
 position = Vector2(198, -444)
 texture = ExtResource("24_8bboj")
@@ -977,17 +1067,32 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_8xqfg")
 texture_scale = 16.88
 
-[node name="SafeZone" type="Area2D" parent="." unique_id=1613662030]
+[node name="Speaker" type="Sprite2D" parent="." unique_id=1446240742]
+position = Vector2(352, -444)
+texture = ExtResource("28_58yx1")
+
+[node name="Jazzy Vibes" type="AudioStreamPlayer2D" parent="Speaker" unique_id=657528954]
+stream = ExtResource("29_hbvmx")
+volume_db = -8.0
+autoplay = true
+max_distance = 600.0
+panning_strength = 3.0
+
+[node name="TutorialExitTrigger" type="Area2D" parent="." unique_id=1613662030]
 visible = false
 position = Vector2(0, -448)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SafeZone" unique_id=1346369141]
-position = Vector2(384, 244)
-shape = SubResource("RectangleShape2D_8xqfg")
+[node name="CollisionShape2D2" type="CollisionPolygon2D" parent="TutorialExitTrigger" unique_id=1492744676]
+position = Vector2(132, 539)
+scale = Vector2(1.2544192, 1.2544192)
+polygon = PackedVector2Array(8, 46.5, 183, 46.5, 183, -29.5, 217, -29.5, 216, 68.5, -17, 69.5, -17, -28.5, 7, -28.5)
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="SafeZone" unique_id=2016224040]
-position = Vector2(253, 461)
-shape = SubResource("CircleShape2D_55par")
+[node name="WarmAreas" type="Area2D" parent="." unique_id=1494135298]
+visible = false
+position = Vector2(0, -448)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WarmAreas" unique_id=435274692]
+polygon = PackedVector2Array(0, 0, 0, 191, 511, 192, 512, 256, 175, 448, 175, 486, 768, 486, 768, 0)
 
 [connection signal="body_entered" from="TutorialButton" to="TutorialButton" method="_button_down"]
 [connection signal="body_exited" from="TutorialButton" to="TutorialButton" method="_button_up"]
@@ -1006,10 +1111,6 @@ shape = SubResource("CircleShape2D_55par")
 [connection signal="body_exited" from="Button2" to="Button2" method="_button_up"]
 [connection signal="buttonDepress" from="Button2" to="Tilemap Ground/Tilemap Tiles" method="_on_button_depress"]
 [connection signal="buttonPress" from="Button2" to="Tilemap Ground/Tilemap Tiles" method="_on_button_press"]
-[connection signal="body_entered" from="Button3" to="Button3" method="_button_down"]
-[connection signal="body_exited" from="Button3" to="Button3" method="_button_up"]
-[connection signal="buttonDepress" from="Button3" to="Tilemap Ground/Tilemap Tiles" method="_on_button_depress"]
-[connection signal="buttonPress" from="Button3" to="Tilemap Ground/Tilemap Tiles" method="_on_button_press"]
 [connection signal="body_entered" from="TutorialMoveableObject/CollisionShape2D/PullArea" to="TutorialMoveableObject/CollisionShape2D/PullArea" method="_on_body_entered"]
 [connection signal="body_exited" from="TutorialMoveableObject/CollisionShape2D/PullArea" to="TutorialMoveableObject/CollisionShape2D/PullArea" method="_on_body_exited"]
 [connection signal="body_entered" from="TutorialMoveableObject/TutorialLabel" to="TutorialMoveableObject/TutorialLabel" method="_on_body_entered"]
@@ -1026,10 +1127,19 @@ shape = SubResource("CircleShape2D_55par")
 [connection signal="body_entered" from="Pickup2" to="." method="_on_battery2_pickup"]
 [connection signal="body_entered" from="Pickup2" to="Player" method="_on_pickup"]
 [connection signal="body_entered" from="Pickup2" to="Pickup2" method="_on_body_entered"]
+[connection signal="body_entered" from="Tutorial Battery" to="Player" method="_on_pickup"]
+[connection signal="body_entered" from="Tutorial Battery" to="Tutorial Battery" method="_on_body_entered"]
+[connection signal="body_entered" from="Tutorial Battery/TutorialLabel" to="Tutorial Battery/TutorialLabel" method="_on_body_entered"]
 [connection signal="body_entered" from="Collectable" to="." method="_on_collectable"]
 [connection signal="body_entered" from="Collectable" to="Tilemap Ground/Tilemap Tiles" method="_on_collectable"]
 [connection signal="body_entered" from="Collectable" to="Collectable" method="_on_body_entered"]
+[connection signal="body_entered" from="FlashlightPickup" to="." method="_on_flashlight_pickup"]
+[connection signal="body_entered" from="FlashlightPickup" to="Player" method="_on_flashlight_pickup"]
+[connection signal="body_entered" from="FlashlightPickup" to="FlashlightPickup" method="_on_body_entered"]
 [connection signal="body_entered" from="Exit" to="." method="_on_exit"]
-[connection signal="body_exited" from="SafeZone" to="." method="_on_safe_zone_area_exited"]
-[connection signal="body_exited" from="SafeZone" to="HeatLamp2" method="_on_tutorial_exit"]
-[connection signal="body_exited" from="SafeZone" to="HeatLamp" method="_on_tutorial_exit"]
+[connection signal="body_entered" from="HeatLamp2/TutorialLabel" to="HeatLamp2/TutorialLabel" method="_on_body_entered"]
+[connection signal="body_entered" from="TutorialExitTrigger" to="." method="_on_tutorial_exit"]
+[connection signal="body_entered" from="TutorialExitTrigger" to="HeatLamp2" method="_on_tutorial_exit"]
+[connection signal="body_entered" from="TutorialExitTrigger" to="HeatLamp" method="_on_tutorial_exit"]
+[connection signal="body_entered" from="WarmAreas" to="." method="_on_warm_area_entered"]
+[connection signal="body_exited" from="WarmAreas" to="." method="_on_warm_area_exited"]

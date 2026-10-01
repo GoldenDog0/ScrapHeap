@@ -10,3 +10,5 @@ func _process(delta: float) -> void:
 
 func _on_body_entered(_body) -> void:
 	timer = 0
+	if self.get_meta("tutorial"):
+		self.queue_free()
