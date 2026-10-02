@@ -10,4 +10,4 @@ The theme for the game jam was winter, and so this game connects to winter throu
 
 The code was written by Riley, and early on with help the of [Jasper Flick's Catlike Coding tutorial](https://catlikecoding.com/godot/)
 
-The art was made solely by Roan, who also made some music and sound effects. Credit to [this cool website](https://google.com) for some of the sound effects and the music in the tutorial.
+The art was made solely by Roan, who also made music and sound effects, with the help of a few copyright free sounds from [Pixabay](https://pixabay.com)
